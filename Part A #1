@@ -1,0 +1,33 @@
+Part A. Scala Warm-up
+
+First code:
+
+    val nulls = Array[Int](0, 0, 0, 0)
+    for (line <- Source.fromFile(filename).getLines) {
+      val toks = line.split(",", -1)
+      for (i <- 0 until toks.length)
+        if (toks(i) == "") nulls(i) = nulls(i) + 1
+    }
+    println(nulls.mkString(","))
+
+The code loops through every line in the file. Then for each line in that file,
+it splits the line and separates by a comma. Then it loops through each element of the line,
+and if it finds a empty sting in the line, then it adds one to the nulls list at the index of the
+null value in the line. The result of the code is a list counting the null (empty) values
+in each column.
+
+Second code:
+
+    val nulls = Source.fromFile(filename).getLines
+    .map(_.split(",", -1)).map(a => a.map(z => if (z == "") 1 else 0))
+    .reduce((x, y) => (x zip y).map { case (u, v) => u + v })
+
+It achieves the same thing, and it use map and reduce methods to achieve the same purpose.
+Map method takes a function, applies the function to the data, and returns the transformed value.
+Reduce method is a higher-order function that takes all the elements in a collection
+and combines them using a binary operation to produce a single value. This code transfers each
+string in the line as 0 or 1, and then adds the columns value together.
+For example:
+['aa', '', 'bb', '']        [0, 1, 0, 1]
+[''  , '', 'cc', '']   ->   [1, 1, 0, 1]  -> [1, 2, 0, 2]
+The result of the code returns a list counting the null (empty) values in each columns.
