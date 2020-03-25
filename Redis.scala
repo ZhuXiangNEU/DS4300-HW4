@@ -85,6 +85,11 @@ class Redis {
   def llen(key: String): Int = {
     findValue(key) length
   }
+        
+  // reset the class
+  def flushall() = {
+    keyValue = HashMap[String, List[String]]()
+  }
 
   // Returns the value of the key, if not, return empty set.
   def findValue(k:String): List[String] = keyValue getOrElse(k, List.empty)
