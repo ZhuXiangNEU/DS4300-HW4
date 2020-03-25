@@ -46,26 +46,26 @@ class Graph {
     for (node <- nodes)
       g = g + (node -> keyVal.get(node))
 
-    var acc = List[String]()
-    var start = BFS(u, g)
-    var end = BFS(v, g).reverse
+    var visited = List[String]()
+    var path = BFS(u, g)
+    var llen = 0
 
-    for (i <- 0 until end.length) {
-      if (end(i).contains(u))
-        for (j <- 0 until start.length)
-          if (start(j).contains(v))
-            acc = acc :+ v
-          else if (start(j).length == 1)
-            acc = acc :+ start(j)(0)
-          else
-            for (k <- 0 until start(j).length) {
-              if (end(i + j).contains(start(j)(k)))
-                acc = acc :+ start(j)(k)
-            }
-    }
-    acc
+    for (i <- 0 until path.length)
+      if (path(i).contains(v))
+        llen = i + 1
+
+    for (j <- 0 until llen)
+      if (path(j).contains(v))
+        visited = visited :+ v
+      else if (path(j).length == 1)
+        visited = visited :+ path(j)(0)
+      else
+        for (k <- 0 until path(j).length) {
+          if ((visited.length <= j) && (BFS(path(j)(k), g)(llen - j - 1).contains(v)))
+            visited = visited :+ path(j)(k)
+        }
+    visited
   }
-
 
   // BFS algorithm
   def BFS(start: Vertex, g: Graph): List[List[Vertex]] = {
